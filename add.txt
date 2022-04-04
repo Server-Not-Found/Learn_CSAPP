@@ -1,0 +1,31 @@
+0000000000400536 <add>:
+  400536:       55                      push   %rbp
+  400537:       48 89 e5                mov    %rsp,%rbp
+  40053a:       48 89 7d e8             mov    %rdi,-0x18(%rbp)
+  40053e:       48 89 75 e0             mov    %rsi,-0x20(%rbp)
+  400542:       48 8b 55 e8             mov    -0x18(%rbp),%rdx
+  400546:       48 8b 45 e0             mov    -0x20(%rbp),%rax
+  40054a:       48 01 d0                add    %rdx,%rax
+  40054d:       48 89 45 f8             mov    %rax,-0x8(%rbp)
+  400551:       48 8b 45 f8             mov    -0x8(%rbp),%rax
+  400555:       5d                      pop    %rbp
+  400556:       c3                      retq   
+
+0000000000400557 <main>:
+  400557:       55                      push   %rbp
+  400558:       48 89 e5                mov    %rsp,%rbp
+  40055b:       48 83 ec 20             sub    $0x20,%rsp
+  40055f:       48 c7 45 f8 00 00 34    movq   $0x12340000,-0x8(%rbp)
+  400566:       12 
+  400567:       48 c7 45 f0 cd ab 00    movq   $0xabcd,-0x10(%rbp)
+  40056e:       00 
+  40056f:       48 8b 55 f0             mov    -0x10(%rbp),%rdx
+  400573:       48 8b 45 f8             mov    -0x8(%rbp),%rax
+  400577:       48 89 d6                mov    %rdx,%rsi
+  40057a:       48 89 c7                mov    %rax,%rdi
+  40057d:       e8 b4 ff ff ff          callq  400536 <add>
+  400582:       48 89 45 e8             mov    %rax,-0x18(%rbp)
+  400586:       b8 00 00 00 00          mov    $0x0,%eax
+  40058b:       c9                      leaveq 
+  40058c:       c3                      retq   
+  40058d:       0f 1f 00                nopl   (%rax)

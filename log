@@ -1,0 +1,10 @@
+/usr/bin/gcc -Wall -g -O2 -Werror -std=gnu99 -I ./src	  ./src/memory/instruction.c ./src/disk/code.c ./src/main.c ./src/memory/dram.c ./src/cpu/mmu.c -o program	
+In file included from ./src/main.c:8:
+./src/disk/elf.h:9:16: error: ‘INSY_LEN’ undeclared here (not in a function); did you mean ‘INT8_MIN’?
+ inst_t program[INSY_LEN] =
+                ^~~~~~~~
+                INT8_MIN
+./src/main.c:11:1: error: expected ‘,’ or ‘;’ before ‘int’
+ int main()
+ ^~~
+make: *** [makefile:14: main] Error 1
