@@ -10,8 +10,8 @@
 uint64_t decode_od(od_t od)
 {
     /*三大类寻址方式:
-    1. 立即数寻址，操作数就是一个常数
-    2. 寄存器寻址，表示某一个寄存器中存储的值
+    1. 立即数寻址，操作数就是一个地址
+    2. 寄存器寻址，表示寄存器的地址
     3. 内存引用，从内存中获取操作数的值，有很多种地址计算方式
     */
     if (od.type == IMM)
@@ -65,6 +65,11 @@ uint64_t decode_od(od_t od)
 }
 
 //定义指令函数
+/*传入的src和des：
+IMM（立即数）类型：就是一个虚拟地址
+REG（寄存器）类型：寄存器的地址
+MEM（内存寻址）类型：经过不同decode方法得到的虚拟地址
+虚拟地址*/
 void mov_reg_reg_handler(uint64_t src, uint64_t des)
 {
     *(uint64_t *)des = *(uint64_t *)src;
@@ -73,12 +78,14 @@ void mov_reg_reg_handler(uint64_t src, uint64_t des)
 
 void mov_reg_mem_handler(uint64_t src, uint64_t des)
 {
-
+    write64bits_dram(va2pa(des),*(uint64_t *)src);
+    reg.rip += sizeof(inst_t);
 }
 
 void mov_mem_reg_handler(uint64_t src, uint64_t des)
 {
-
+    *(uint64_t *)des = read64bits_dram(va2pa(src));
+    reg.rip = reg.rip + sizeof(inst_t);
 }
 
 void push_reg_handler(uint64_t src, uint64_t des)
@@ -90,7 +97,9 @@ void push_reg_handler(uint64_t src, uint64_t des)
 
 void pop_reg_handler(uint64_t src, uint64_t des)
 {
-    printf("pop");
+    *(uint64_t *)src = read64bits_dram(va2pa(reg.rsp));
+    reg.rsp += 0x8;
+    reg.rip += sizeof(inst_t);
 }
 
 void call_handler(uint64_t src, uint64_t des)
@@ -139,7 +148,11 @@ void instruction_cycle()
     //程序计数器rip指向的指令，从程序计数器处取指令
     inst_t *instr = (inst_t *)reg.rip;
 
-    //获取src和des的内存物理地址
+    /*
+    获取src和des的内存虚拟地址
+    在这里统一decode，后续进入handler的时候就可以只关注已经获取到的虚拟地址
+    只需要关注va2pa就可以
+    */
     uint64_t src = decode_od(instr->src); 
     uint64_t des = decode_od(instr->des);
     
