@@ -38,7 +38,7 @@ int main()
     print_stack();
 
     // run instruction
-    for(int i=0;i<5;i++)
+    for(int i=0;i<15;i++)
     {
         instruction_cycle();
         print_register();
