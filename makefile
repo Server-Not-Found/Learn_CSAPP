@@ -12,7 +12,7 @@ CODE = ./src/memory/instruction.c ./src/disk/code.c ./src/main.c \
 .PHONY: program		#防止名字冲突同时提高效率
 main: 
 	$(CC) $(CFLAGS) -I $(SRC)  $(CODE) -o $(EXE)
-
-#运行可执行文件
-run:
 	./$(EXE)
+
+clean:
+	rm -f ./$(EXE)
