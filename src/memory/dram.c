@@ -6,6 +6,7 @@
 
 #define SRAM_CACHE_SETTING 0    //是否通过SRAM_CACHE读取,0不读取，1读取
 
+//读取该物理地址中存放的值
 uint64_t read64bits_dram(uint64_t paddr)
 {
     if(SRAM_CACHE_SETTING == 1)
@@ -28,9 +29,10 @@ uint64_t read64bits_dram(uint64_t paddr)
     val += (((uint64_t)mm[paddr + 6]) << 48);
     val += (((uint64_t)mm[paddr + 7]) << 56);
 
-    return 0x0;
+    return val;
 }
 
+//改写该物理地址存放的值
 void write64bits_dram(uint64_t paddr, uint64_t data)
 {
     if(SRAM_CACHE_SETTING == 1)
