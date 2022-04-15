@@ -103,6 +103,12 @@ void pop_reg_handler(uint64_t src, uint64_t des)
 }
 
 void call_handler(uint64_t src, uint64_t des)
+/*
+call指令的效果是将call指令后的一条命令的地址压到栈中，
+并且跳到call的函数的第一条指令执行（改变rip的指向）
+一直执行当前函数的指令，直到遇到ret指令，就会从栈中弹出之前压入的返回地址，
+然后跳转到这个地址。
+*/
 {
     //src:imm
     //栈顶指针指向低一个64位（八个字节）地址的位置，存放的是返回地址
@@ -115,7 +121,10 @@ void call_handler(uint64_t src, uint64_t des)
 
 void ret_handler(uint64_t src, uint64_t des)
 {
-
+    //读取栈顶的地址（就是返回地址）
+    uint64_t ret_addr = read64bits_dram(va2pa(reg.rsp));
+    reg.rip = ret_addr;
+    reg.rsp += 0x8;
 }
 
 void add_reg_reg_handler(uint64_t src, uint64_t des)
