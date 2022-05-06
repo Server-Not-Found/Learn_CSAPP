@@ -23,8 +23,9 @@ uint64_t string2uint_range(const char *str, int start, int end)
 
     //DFA: deterministic finite automata to scan string and get value
     //有限状态自动机
-    int state = 0;
+    int state = 0;  //初始化状态为0
 
+    //遍历输入的字符串
     for(int i=start;i<=end;i++)
     {
         char c = str[i];
@@ -36,15 +37,15 @@ uint64_t string2uint_range(const char *str, int start, int end)
             }
             else if('1' <= c && c <= '9'){
                 state = 2;
-                uv = c - '0';
+                uv = c - '0';   //ASCII码直接相减
                 continue;
             }
             else if(c == '-'){
                 state = 3;
-                sign_bit = 1;
+                sign_bit = 1;   //符号位变成1，表示负号
                 continue;
             }
-            else if(c == ' '){
+            else if(c == ' '){  //过滤空字符
                 state = 0;
                 continue;
             }
@@ -66,7 +67,9 @@ uint64_t string2uint_range(const char *str, int start, int end)
                 state = 6;
                 continue;
             }
-            else{ goto fail; }
+            else{ 
+                goto fail; 
+            }
         } 
         else if(state == 2){
             if('0' <=  c && c <= '9'){
@@ -88,14 +91,15 @@ uint64_t string2uint_range(const char *str, int start, int end)
         }
         else if(state == 3){
             if(c == '0'){
-                // printf("fuck you!!!");
                 state = 1;
+                continue;
             }
             else if('1' <= c && c <= '9'){
                 state = 2;
                 uv = c - '0';
                 continue;
             }
+            else{goto fail;}
         }
         else if(state == 4){
             if('0' <= c && c <= '9'){
@@ -138,11 +142,14 @@ uint64_t string2uint_range(const char *str, int start, int end)
         }
     }
 
-    if(sign_bit == 0)   return uv;  //正数
+    if(sign_bit == 0)   
+    {
+        return uv;  //正数
+    }
     else if(sign_bit == 1)
     {
         int64_t sv = -1 * (int64_t)uv;
-        return *(uint64_t *)sv;
+        return *((uint64_t *)&sv);
     }
 
     return 0;
