@@ -12,9 +12,10 @@ typedef enum OPERAND_TYPE
     EMPTY,                  // 0
     IMM,                    // 1
     REG,                    // 2
-    MEM,                    // 3
+    MEM_IMM,                // 3
 } od_type_t;
 
+//汇编指令操作结构体
 typedef enum OP
 {
     mov_reg_reg,    //0

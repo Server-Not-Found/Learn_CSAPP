@@ -3,6 +3,7 @@
 #include<stdlib.h>
 #include<headers/common.h>
 
+//将字符串转换成整型数据
 uint64_t string2uint(const char *str)
 {
     return string2uint_range(str,0,-1);
